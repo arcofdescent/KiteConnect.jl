@@ -1,5 +1,9 @@
 module KiteConnect
 
-greet() = print("Hello World!")
+include("quote.jl")
+
+# function ()
+#     return 10
+# end
 
 end # module
