@@ -14,21 +14,26 @@ API_KEY = ""
 API_SECRET = ""
 ACCESS_TOKEN = ""
 
-include("quote.jl")
-
 function authenticate(api_key::String, api_secret::String)
-  API_KEY = api_key
-  API_SECRET = api_secret
+  global API_KEY = api_key
+  global API_SECRET = api_secret
 end
 
-function http_get(url::String)
-  println(API_SECRET)
-  # r = HTTP.request("GET", "$API_ENDPOINT/quote/ltp")
-  # r.body |> String |> JSON.parse
+function get_http_headers()
+  [
+    "X-Kite-Version" => "3",
+    "Authorization" => "token $API_KEY:$ACCESS_TOKEN",
+  ]
+end
+
+function http_get(url_fragment::String)
+  url = "$API_ENDPOINT/$url_fragment"
+  r = HTTP.request("GET", url, get_http_headers())
+  r.body |> String |> JSON.parse
 end
 
 function gen_access_token(request_token::String)
-  checksum = request_token |> sha256 |> bytes2hex
+  checksum = (API_KEY * request_token * API_SECRET) |> sha256 |> bytes2hex
   println(checksum)
   url = "$API_ENDPOINT/session/token"
 
@@ -40,7 +45,11 @@ function gen_access_token(request_token::String)
   body = "api_key=$API_KEY&request_token=$request_token&checksum=$checksum"
   println(body)
 
-  HTTP.request("POST", url, headers, body)
+  res = HTTP.request("POST", url, headers, body)
+  r = res.body |> String |> JSON.parse
+  global ACCESS_TOKEN = r["data"]["access_token"]
 end
+
+include("quote.jl")
 
 end # module
