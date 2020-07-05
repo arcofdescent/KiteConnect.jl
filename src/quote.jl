@@ -1,15 +1,21 @@
 module Quote
 
-# using ..KiteConnect
+using ..KiteConnect: http_get
 
 """
-    KiteConnect.Quote.ltp("NSE:INFY")
+    ltp("NSE:INFY")
 
 Get LTP of trading symbol
+`instrument` should be in EXCHANGE:TRADINGSYMBOL format
 """
 function ltp(instrument)
+  parts = split(instrument, ":")
+  if (length(parts) != 2)
+    error("instrument should be in EXCHANGE:TRADINGSYMBOL format")
+  end
+
   url_fragment = "quote/ltp?i=$instrument"
-  res = KiteConnect.http_get(url_fragment)
+  res = http_get(url_fragment)
   res["data"][instrument]["last_price"]
 end
 
