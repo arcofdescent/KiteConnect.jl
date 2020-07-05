@@ -5,7 +5,7 @@ Julia module to interface with Zerodha's KiteConnect API
 """
 module KiteConnect
 
-export authenticate, gen_access_token, ltp
+export authenticate, gen_access_token
 
 using HTTP
 using JSON
@@ -64,6 +64,6 @@ function gen_access_token(request_token::String)
 end
 
 include("quote.jl")
-using .Quote
+export ltp
 
 end # module

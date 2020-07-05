@@ -1,17 +1,15 @@
-module Quote
-
-using ..KiteConnect: http_get
 
 """
-    ltp("NSE:INFY")
+    ltp(instrument::String)
 
 Get LTP of trading symbol
-`instrument` should be in EXCHANGE:TRADINGSYMBOL format
+
+`instrument` should be in EXCHANGE:TRADINGSYMBOL format, eg. "NSE:INFY"
 """
-function ltp(instrument)
+function ltp(instrument::String)
   parts = split(instrument, ":")
   if (length(parts) != 2)
-    error("instrument should be in EXCHANGE:TRADINGSYMBOL format")
+    throw(ArgumentError("instrument should be in EXCHANGE:TRADINGSYMBOL format"))
   end
 
   url_fragment = "quote/ltp?i=$instrument"
@@ -19,4 +17,3 @@ function ltp(instrument)
   res["data"][instrument]["last_price"]
 end
 
-end
