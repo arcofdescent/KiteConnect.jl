@@ -5,7 +5,7 @@ Julia module to interface with Zerodha's KiteConnect API
 """
 module KiteConnect
 
-export authenticate, gen_access_token
+export init, gen_access_token
 
 using HTTP
 using JSON
@@ -17,12 +17,12 @@ API_SECRET = ""
 ACCESS_TOKEN = ""
 
 """
-  `authenticate(api_key::String, api_secret::String)`
+  `init(api_key::String, api_secret::String)`
 
 Setup your KiteConnect session by providing your API key and
 API secret which you get from Zerodha
 """
-function authenticate(api_key::String, api_secret::String)
+function init(api_key::String, api_secret::String)
   global API_KEY = api_key
   global API_SECRET = api_secret
 end
@@ -43,7 +43,7 @@ end
 """
   `gen_access_token(request_token::String)`
 
-Genrate the access token by passing in yout request token
+Generate the access token by passing in yout request token
 """
 function gen_access_token(request_token::String)
   checksum = (API_KEY * request_token * API_SECRET) |> sha256 |> bytes2hex
