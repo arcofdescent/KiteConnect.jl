@@ -47,16 +47,13 @@ Generate the access token by passing in yout request token
 """
 function gen_access_token(request_token::String)
   checksum = (API_KEY * request_token * API_SECRET) |> sha256 |> bytes2hex
-  println(checksum)
   url = "$API_ENDPOINT/session/token"
 
   headers = [
     "X-Kite-Version" => "3",
     "Content-Type"   => "application/x-www-form-urlencoded",
   ]
-
   body = "api_key=$API_KEY&request_token=$request_token&checksum=$checksum"
-  println(body)
 
   res = HTTP.request("POST", url, headers, body)
   r = res.body |> String |> JSON.parse
