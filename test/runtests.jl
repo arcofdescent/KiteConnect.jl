@@ -2,5 +2,5 @@
 using KiteConnect
 using Test
 
-@test_throws ArgumentError ltp("INFY")
+@test_throws ArgumentError KiteConnect.ltp("INFY")
 
