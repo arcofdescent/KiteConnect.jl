@@ -11,11 +11,9 @@ pkg> add KiteConnect
 
 ## Get LTP of an instrument
 
-```
+```julia
 using KiteConnect
 
-init(api_key, api_secret)
-gen_access_token(request_token)
-ltp("NSE:INFY")
+KiteConnect.gen_access_token(request_token)
+KiteConnect.ltp("NSE:INFY")
 ```
-
