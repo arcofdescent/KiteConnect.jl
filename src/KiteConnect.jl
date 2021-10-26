@@ -32,7 +32,7 @@ end
 """
   `gen_access_token(request_token::String)`
 
-Generate the access token by passing in yout request token
+Generate the access token by passing in your request token
 """
 function gen_access_token(request_token::String)
     DotEnv.config()

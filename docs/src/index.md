@@ -2,5 +2,5 @@
 # KiteConnect Documentation
 
 ```@docs
-init(api_key::String, api_secret::String)
+gen_access_token(request_token::String)
 ```
