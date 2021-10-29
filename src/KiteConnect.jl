@@ -8,7 +8,6 @@ module KiteConnect
 using HTTP
 using JSON3
 using SHA
-using DotEnv
 
 include("quote.jl")
 include("historical_data.jl")
@@ -35,8 +34,6 @@ end
 Generate the access token by passing in your request token
 """
 function gen_access_token(request_token::String)
-    DotEnv.config()
-
     checksum = (ENV["KITE_API_KEY"] * request_token * ENV["KITE_API_SECRET"]) |> sha256 |> bytes2hex
     url = "$API_ENDPOINT/session/token"
 
