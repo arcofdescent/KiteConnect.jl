@@ -5,6 +5,8 @@ Julia module to interface with Zerodha's KiteConnect API
 """
 module KiteConnect
 
+export Bar
+
 using HTTP
 using JSON3
 using SHA
