@@ -17,16 +17,16 @@ include("historical_data.jl")
 const API_ENDPOINT = "https://api.kite.trade"
 ACCESS_TOKEN = ""
 
-function get_http_headers()
+function get_http_headers(access_token::String)
     return [
         "X-Kite-Version" => "3",
-        "Authorization" => "token " * ENV["KITE_API_KEY"] * ":$ACCESS_TOKEN",
+        "Authorization" => "token " * ENV["KITE_API_KEY"] * access_token,
     ]
 end
 
-function http_get(url_fragment::String)
+function http_get(url_fragment::String, access_token::String)
     url = "$API_ENDPOINT/$url_fragment"
-    r = HTTP.request("GET", url, get_http_headers())
+    r = HTTP.request("GET", url, get_http_headers(access_token))
     return r.body |> String |> JSON3.read
 end
 
@@ -47,7 +47,7 @@ function gen_access_token(request_token::String)
 
     res = HTTP.request("POST", url, headers, body)
     r = res.body |> String |> JSON3.read
-    global ACCESS_TOKEN = r["data"]["access_token"]
+    return r["data"]["access_token"]
 end
 
 end # module
