@@ -20,7 +20,7 @@ ACCESS_TOKEN = ""
 function get_http_headers(access_token::String)
     return [
         "X-Kite-Version" => "3",
-        "Authorization" => "token " * ENV["KITE_API_KEY"] * access_token,
+        "Authorization" => "token " * ENV["KITE_API_KEY"] * ":$access_token",
     ]
 end
 
