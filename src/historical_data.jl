@@ -6,24 +6,24 @@ struct Bar
     interval::String
     timestamp::DateTime
     open::Number
-    low::Number
     high::Number
+    low::Number
     close::Number
-    Volume::Int
+    volume::Int
 end
 
 """
     historical_data(instrument_token::Integer, interval::String,
-                    from_dt::DateTime, to_dt::DateTime)
+                    from_dt::DateTime, to_dt::DateTime, access_token::String)
 
 Get historical data
 """
 function historical_data(instrument_token::Integer, interval::String,
-                         from_dt::DateTime, to_dt::DateTime)
+                         from_dt::DateTime, to_dt::DateTime, access_token::String)
     url_fragment = "instruments/historical/$instrument_token/$interval"
     fd = Dates.format(from_dt, "yyyy-mm-dd+HH:MM:SS")
     td = Dates.format(to_dt, "yyyy-mm-dd+HH:MM:SS")
-    res = http_get(url_fragment * "?from=$fd&to=$td")
+    res = http_get(url_fragment * "?from=$fd&to=$td", access_token)
 
     # return a list of Bar objects
     bars = []
@@ -39,4 +39,25 @@ function historical_data(instrument_token::Integer, interval::String,
 
     return bars
 end
+
+function accumulate_historical_data(bars, period)
+    for idx in 1:period:length(bars)
+        bar1 = bars[idx]
+        bar2 = bars[idx+1]
+
+        bar = Bar(
+            bar1.instrument_token,
+            bar1.interval,
+            bar1.timestamp,
+            bar1.open,
+            (bar1.high > bar2.high ? bar1.high : bar2.high),
+            (bar1.low < bar2.low ? bar1.low : bar2.low),
+            bar2.close,
+            bar1.volume + bar2.volume
+        )
+        
+        println(bar)
+    end
+end
+
 

@@ -1,11 +1,11 @@
 """
-    ltp(access_token::String, instrument::String)
+    ltp(instrument::String, access_token::String)
 
 Get LTP of trading symbol
 
 `instrument` should be in EXCHANGE:TRADINGSYMBOL format, eg. "NSE:INFY"
 """
-function ltp(access_token::String, instrument::String)
+function ltp(instrument::String, access_token::String)
     parts = split(instrument, ":")
     if (length(parts) != 2)
         throw(ArgumentError("instrument should be in EXCHANGE:TRADINGSYMBOL format"))
