@@ -1,5 +1,6 @@
 
 using Dates
+using StructTypes
 
 struct Bar
     instrument_token::Int
@@ -11,6 +12,8 @@ struct Bar
     close::Number
     volume::Int
 end
+
+StructTypes.StructType(::Type{Bar}) = StructTypes.Struct()
 
 """
     historical_data(instrument_token::Integer, interval::String,
@@ -36,6 +39,8 @@ function historical_data(instrument_token::Integer, interval::String,
 
         push!(bars, bar)
     end
+
+    # TODO remove the last bar
 
     return bars
 end
