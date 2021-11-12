@@ -41,28 +41,33 @@ function historical_data(instrument_token::Integer, interval::String,
 end
 
 function accumulate_historical_data(bars, period)
-
     period_2 = period
 
-    for idx in 1:period:length(bars)
-
-        println(idx)
+    ret = []
+    for idx in 1:period:length(bars)-period
         inside_bars = bars[idx:period_2]
-        println(inside_bars)
-        period_2 += period
-        # bar = Bar(
-        #     bar1.instrument_token,
-        #     bar1.interval,
-        #     bar1.timestamp,
-        #     bar1.open,
-        #     (bar1.high > bar2.high ? bar1.high : bar2.high),
-        #     (bar1.low < bar2.low ? bar1.low : bar2.low),
-        #     bar2.close,
-        #     bar1.volume + bar2.volume
-        # )
+        bar1 = inside_bars[1]
+
+        high = max(map(b -> b.high, inside_bars)...)
+        low = min(map(b -> b.low, inside_bars)...)
+        vol = sum(map(b -> b.volume, inside_bars))
+
+        bar = Bar(
+            bar1.instrument_token,
+            bar1.interval,
+            bar1.timestamp,
+            bar1.open,
+            high,
+            low,
+            inside_bars[end].close,
+            vol
+        )
         
-        # println(bar)
+        push!(ret, bar)
+        period_2 += period
     end
+
+    return ret
 end
 
 
