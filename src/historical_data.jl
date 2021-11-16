@@ -40,8 +40,22 @@ function historical_data(instrument_token::Integer, interval::String,
         push!(bars, bar)
     end
 
-    # TODO remove the last bar
-
+    # Remove the last bar. Why?
+    # Say we want data from 10:00 to 11:00 i.e. for a duration of 60 minutes, at an interval
+    # of 15 minutes.
+    # This will give 5 bars
+    # 1. 10:00 ohlc
+    # 2. 10:15 ohlc
+    # 3. 10:30 ohlc
+    # 4. 10:45 ohlc
+    # 5. 11:00 ohlc
+    #
+    # The last bar contains data from 11:00 onwards. We don't what this, so we can discard this
+    # bar
+    if length(bars) > 0
+        pop!(bars)
+    end
+    
     return bars
 end
 
