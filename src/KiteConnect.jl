@@ -13,6 +13,7 @@ using SHA
 
 include("quote.jl")
 include("historical_data.jl")
+include("charges.jl")
 
 const API_ENDPOINT = "https://api.kite.trade"
 ACCESS_TOKEN = ""
