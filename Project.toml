@@ -1,7 +1,7 @@
 name = "KiteConnect"
 uuid = "09e18e8d-40f5-4176-baf5-9239a33e36dd"
 authors = ["Rohan Almeida <rohan.almeida@gmail.com>"]
-version = "0.2.0"
+version = "0.3.2"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"

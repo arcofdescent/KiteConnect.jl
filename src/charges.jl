@@ -1,3 +1,4 @@
+module Charges
 
 # Flat brokerage in Rs. per executed order. So a buy and sell will become Rs. 40
 FLAT_BROKERAGE = 20.00
@@ -48,7 +49,7 @@ function commodity_futures(commodity, buy_price, sell_price, quantity)
     turnover = (buy_price + sell_price) * quantity
 
     brokerage = turnover * BROKERAGE
-    @info brokerage
+    @debug brokerage
 
     brokerage =
       if brokerage > FLAT_BROKERAGE * 2
@@ -56,7 +57,7 @@ function commodity_futures(commodity, buy_price, sell_price, quantity)
       else
         brokerage
       end
-    @info brokerage
+    @debug brokerage
 
     stt = sell_price * quantity * STT_COMMODITY
 
@@ -88,4 +89,6 @@ function commodity_futures(commodity, buy_price, sell_price, quantity)
       "points_to_breakeven" => points_to_breakeven,
       "pips_to_breakeven" => pips_to_breakeven
     )
+end
+
 end
