@@ -4,9 +4,12 @@ authors = ["Rohan Almeida <rohan.almeida@gmail.com>"]
 version = "0.3.2"
 
 [deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+Parsers = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 SHA = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 StructTypes = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
 

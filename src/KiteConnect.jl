@@ -10,13 +10,14 @@ export Bar
 using HTTP
 using JSON3
 using SHA
+using CSV
+using DataFrames
 
 include("quote.jl")
 include("historical_data.jl")
 include("charges.jl")
 
 const API_ENDPOINT = "https://api.kite.trade"
-ACCESS_TOKEN = ""
 
 function get_http_headers(access_token::String)
     return [
@@ -49,6 +50,19 @@ function gen_access_token(request_token::String)
     res = HTTP.request("POST", url, headers, body)
     r = res.body |> String |> JSON3.read
     return r["data"]["access_token"]
+end
+
+"""
+    `get_instruments(access_token::String)`
+
+Get all the instruments from Kite as a DataFrames object
+"""
+function get_instruments(access_token::String)
+    url = "$API_ENDPOINT/instruments"
+    r = HTTP.request("GET", url, get_http_headers(access_token))
+    csv = String(r.body)
+    
+    return CSV.read(IOBuffer(csv), DataFrame)
 end
 
 end # module
