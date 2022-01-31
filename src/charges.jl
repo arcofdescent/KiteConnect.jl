@@ -19,13 +19,14 @@ EXCHANGE_TRANSACTION_CHARGES_COMMODITY_FUTURES = 0.0026 * 0.01
 # percent
 GST = 18 * 0.01
 
-# SEBI charges Rs.5 / crore
+# SEBI charges Rs.10 / crore for non-agri
 SEBI_CHARGES = 1_00_00_000 / 10
 
 # Stamp duty
 # percent
 STAMP_DUTY = 0.002 * 0.01
 STAMP_DUTY_COMMODITY_FUTURES = 0.002 * 0.01
+STAMP_DUTY_CURRENCY_FUTURES = 0.001
 
 function commodity_futures(commodity, buy_price, sell_price, quantity)
     unit_change =
@@ -70,6 +71,53 @@ function commodity_futures(commodity, buy_price, sell_price, quantity)
     total_charges = brokerage + stt + exchange_transaction_charges + gst + sebi_charges + stamp_duty
 
     gross_profit = (sell_price - buy_price) * quantity
+    net_profit = gross_profit - total_charges
+
+    points_to_breakeven = 0
+    pips_to_breakeven = 0
+
+    return Dict(
+      "turnover" => turnover,
+      "gross_profit" => gross_profit,
+      "brokerage" => brokerage,
+      "stt" => stt,
+      "exchange_transaction_charges" => exchange_transaction_charges,
+      "gst" => gst,
+      "sebi_charges" => sebi_charges,
+      "stamp_duty" => stamp_duty,
+      "total_charges" => total_charges,
+      "net_profit" => net_profit,
+      "points_to_breakeven" => points_to_breakeven,
+      "pips_to_breakeven" => pips_to_breakeven
+    )
+end
+
+function currency_futures(buy_price, sell_price, quantity)
+    exchange_rate = (sell_price + buy_price) / 2
+    turnover = exchange_rate * quantity * 2000
+
+    brokerage = turnover * BROKERAGE
+    @debug brokerage
+
+    brokerage =
+      if brokerage > FLAT_BROKERAGE * 2
+        FLAT_BROKERAGE * 2
+      else
+        brokerage
+      end
+    @debug brokerage
+
+    stt = 0
+
+    exchange_transaction_charges = turnover * EXCHANGE_TRANSACTION_CHARGES_CURRENCY_FUTURES
+
+    gst = (brokerage + exchange_transaction_charges) * GST
+    sebi_charges = turnover / SEBI_CHARGES
+    stamp_duty = (buy_price * quantity) * STAMP_DUTY_CURRENCY_FUTURES
+
+    total_charges = brokerage + stt + exchange_transaction_charges + gst + sebi_charges + stamp_duty
+
+    gross_profit = (sell_price - buy_price) / 2 * quantity * 2000
     net_profit = gross_profit - total_charges
 
     points_to_breakeven = 0
